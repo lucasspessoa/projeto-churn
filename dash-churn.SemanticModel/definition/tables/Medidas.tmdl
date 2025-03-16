@@ -1,0 +1,79 @@
+table Medidas
+	lineageTag: 8ba98403-c0fd-4e76-bb7f-369816985c21
+
+	measure ClientesInativos = COUNTROWS(FILTER(vwChurnAnalysis, vwChurnAnalysis[IsChurn] = 1))
+		formatString: 0
+		lineageTag: 6338f987-3205-4b2e-8edf-513c860cd5c2
+
+		changedProperty = IsHidden
+
+	measure TaxaChurn = ```
+			
+			    DIVIDE(
+			        COUNTROWS(FILTER(vwChurnAnalysis, vwChurnAnalysis[IsChurn] = 1)),
+			        COUNTROWS(FILTER(vwChurnAnalysis, vwChurnAnalysis[IsChurn] = 0)),
+			        0
+			    )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b594f68f-a0ad-4808-ae02-f0e50b7bdd3c
+
+		changedProperty = IsHidden
+
+	measure MediaDiasDesdeUltimaCompra = AVERAGE(vwChurnAnalysis[DaysSinceLastOrder])
+		lineageTag: 4d89691b-9a2a-4ce8-8492-5e85012914c8
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure ImpactoFinanceiro =
+			
+			SUMX(
+			    FILTER(vwChurnAnalysis, vwChurnAnalysis[IsChurn] = 1),
+			    vwChurnAnalysis[TotalSalesAmount]
+			)
+		lineageTag: 51650b40-3129-4394-8c22-2902067fc85e
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure ValorMedioGasto = AVERAGE(vwChurnAnalysis[TotalSalesAmount])
+		lineageTag: b96aca1d-c30c-4e88-959e-9066d6ebb08e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure FrequenciaMedia =
+			CALCULATE(
+			    AVERAGE(vwChurnAnalysis[TotalOrders]),
+			    FILTER(vwChurnAnalysis, vwChurnAnalysis[IsChurn] = 1)
+			    )
+		lineageTag: 03385e11-a9f2-4862-b62b-3a70f42164d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Coluna 1'
+		dataType: string
+		isHidden
+		lineageTag: 142e42ce-6167-4295-8687-4dcd90e41b7d
+		summarizeBy: none
+		sourceColumn: Coluna 1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Coluna 1", type text}})
+				in
+				    #"Tipo Alterado"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,117 @@
+table vwChurnAnalysis
+	lineageTag: e1fb21a9-ff62-4faa-be98-f7f8a9808ad1
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: c0ee9c2f-3c1e-4b99-ad6d-348dfedd236d
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		lineageTag: 583aa3b8-f97e-44ce-84ea-ec9965c5181b
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClientName
+		dataType: string
+		lineageTag: 97e56a30-ede3-4eeb-82ea-b13f6a16a106
+		summarizeBy: none
+		sourceColumn: ClientName
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearlyIncome
+		dataType: double
+		lineageTag: b1a9d047-5dd7-40fd-874d-7efd70077877
+		summarizeBy: sum
+		sourceColumn: YearlyIncome
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column StateProvinceName
+		dataType: string
+		lineageTag: 592ac7b0-fe71-4a41-97e5-49792cb542c6
+		summarizeBy: none
+		sourceColumn: StateProvinceName
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastOrderDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9ffd45d2-3e7d-4620-9630-f0d4fb16caa5
+		summarizeBy: none
+		sourceColumn: LastOrderDate
+
+		variation Variation
+			isDefault
+			relationship: ca4632b2-a47e-403c-b5a6-904d08a94c41
+			defaultHierarchy: LocalDateTable_074293af-6cfa-44fc-8dbd-f8db90f37895.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DaysSinceLastOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 05774279-1c39-4d07-ade7-e928a1eae112
+		summarizeBy: sum
+		sourceColumn: DaysSinceLastOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalOrders
+		dataType: int64
+		formatString: 0
+		lineageTag: 83872d89-1c83-4106-82ee-6f8069ddf228
+		summarizeBy: sum
+		sourceColumn: TotalOrders
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalSalesAmount
+		dataType: double
+		lineageTag: 3c039f7a-d90d-40b8-8bb1-90913b155e23
+		summarizeBy: sum
+		sourceColumn: TotalSalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsChurn
+		dataType: int64
+		formatString: 0
+		lineageTag: 5df144f0-cfd5-4ce5-97b3-033f9a42e78d
+		summarizeBy: sum
+		sourceColumn: IsChurn
+
+		annotation SummarizationSetBy = Automatic
+
+	column SegmentacaoCliente
+		dataType: string
+		lineageTag: 2116a3c4-34fa-40fd-b9d7-72238b319f9f
+		summarizeBy: none
+		sourceColumn: SegmentacaoCliente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vwChurnAnalysis = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database("LAPTOP-MJ78D50L\SQLEXPRESS", "AdventureWorksDW2019", [Query="select * from vwQueryChurn"])
+				in
+				    Fonte
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,23 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["vwChurnAnalysis","Medidas"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.140.1351.0 (25.02)+9bb96b6a5aee417774126f3416805b86efac121f
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table vwChurnAnalysis
+ref table DateTableTemplate_9d9ee23f-c2eb-4ad1-94c0-dacb3a059e9a
+ref table LocalDateTable_074293af-6cfa-44fc-8dbd-f8db90f37895
+ref table Medidas
+
+ref cultureInfo pt-BR
+

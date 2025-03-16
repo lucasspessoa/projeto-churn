@@ -1,0 +1,5 @@
+relationship ca4632b2-a47e-403c-b5a6-904d08a94c41
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vwChurnAnalysis.LastOrderDate
+	toColumn: LocalDateTable_074293af-6cfa-44fc-8dbd-f8db90f37895.Date
+
